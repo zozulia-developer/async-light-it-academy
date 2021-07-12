@@ -1,4 +1,4 @@
-from typing import List, Dict, Any
+from typing import List
 from fastapi import APIRouter, Depends
 
 from .dependencies import UserRepository, get_user_repository

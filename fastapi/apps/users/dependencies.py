@@ -33,8 +33,6 @@ class JSONPlaceholderUserRepository(UserRepository):
         return [self._convert_user(raw_user) for raw_user in raw_users]
 
     async def _create_user(self, user: CreateUserParams) -> Dict[str, Any]:
-        # Найдите способ не создавать эту сессию каждый раз в каждой функции
-        # А создать одну на все время работы JSONPlaceholderUserRepository
         async with aiohttp.ClientSession() as session:
             resp = await session.post(self._endpoint, json=user.dict())
             raw_user = await resp.json()
