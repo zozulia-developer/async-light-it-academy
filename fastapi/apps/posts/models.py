@@ -6,7 +6,7 @@ class Post(BaseModel):
     id: int
     title: str
     body: str
-    author: Dict[str, Any]
+    # author: Dict[str, Any]
 
 
 class CreatePostParams(BaseModel):
