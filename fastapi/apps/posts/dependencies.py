@@ -21,9 +21,13 @@ class JSONPlaceholderPostRepository(PostRepository):
         self._endpoint = "https://jsonplaceholder.typicode.com/posts"
         self._endpoint_author = "https://jsonplaceholder.typicode.com/users"
 
-    async def list_posts(self) -> List[Coroutine[Any, Any, Post]]:
+    async def list_posts(self) -> List[Post]:
         raw_posts = await self._list_posts()
         return [self._convert_post(raw_post) for raw_post in raw_posts]
+
+    async def create_post(self, post: CreatePostParams) -> Post:
+        raw_post = await self._create_post(post)
+        return self._convert_post(raw_post)
 
     async def _list_posts(self) -> List[Dict[str, Any]]:
         async with aiohttp.ClientSession() as session:
