@@ -21,13 +21,13 @@ class PostRepository:
         return self._convert_post(raw_post)
 
     async def _list_posts(self) -> List[Dict[str, Any]]:
-        async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession(trust_env=True) as session:
             resp_posts = await session.get(self._endpoint_posts)
             raw_posts = await resp_posts.json()
             return raw_posts
 
     async def _list_users(self) -> List[Dict[str, Any]]:
-        async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession(trust_env=True) as session:
             resp = await session.get(self._endpoint_users)
             raw_users = await resp.json()
             return raw_users

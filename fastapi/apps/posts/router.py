@@ -8,7 +8,9 @@ router = APIRouter()
 
 
 @router.get('/', tags=['posts'], response_model=List[Post])
-async def list_posts(repository: PostRepository = Depends(get_post_repository)):
+async def list_posts(
+        repository: PostRepository = Depends(get_post_repository)
+):
     posts = await repository.list_posts()
     return posts
 

@@ -33,13 +33,13 @@ class JSONPlaceholderUserRepository(UserRepository):
         return [self._convert_user(raw_user) for raw_user in raw_users]
 
     async def _create_user(self, user: CreateUserParams) -> Dict[str, Any]:
-        async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession(trust_env=True) as session:
             resp = await session.post(self._endpoint, json=user.dict())
             raw_user = await resp.json()
             return raw_user
 
     async def _list_users(self) -> List[Dict[str, Any]]:
-        async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession(trust_env=True) as session:
             resp = await session.get(self._endpoint)
             raw_users = await resp.json()
             return raw_users
