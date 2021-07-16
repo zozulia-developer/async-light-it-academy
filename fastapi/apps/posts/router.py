@@ -2,7 +2,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 
 from .dependencies import PostRepository, get_post_repository
-from .models import CreatePostParams, Post, UpdatePostParams, DetailPost
+from .models import CreatePostParams, Post, UpdatePostParams, PostDetails, CreatedPost
 
 router = APIRouter()
 
@@ -15,16 +15,16 @@ async def list_posts(
     return posts
 
 
-@router.get('/{post_id}', tags=['posts'], response_model=DetailPost)
-async def post_detail(
+@router.get('/{post_id}', tags=['posts'], response_model=PostDetails)
+async def post_details(
         post_id: int,
         repository: PostRepository = Depends(get_post_repository)
 ):
-    post = await repository.post_detail(post_id)
+    post = await repository.post_details(post_id)
     return post
 
 
-@router.post('/', tags=['posts'], response_model=Post, status_code=201)
+@router.post('/', tags=['posts'], response_model=CreatedPost, status_code=201)
 async def create_post(
         post: CreatePostParams,
         repository: PostRepository = Depends(get_post_repository)
@@ -39,5 +39,5 @@ async def update_post(
         post: UpdatePostParams,
         repository: PostRepository = Depends(get_post_repository)
 ):
-    post = await repository.update_post(post_id, post)
+    post = await repository.update_post(post, post_id)
     return post

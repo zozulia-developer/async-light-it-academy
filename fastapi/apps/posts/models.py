@@ -6,20 +6,23 @@ class Post(BaseModel):
     id: int
     title: str
     body: str
-    # author: Dict[str, Any]
+    author: Dict[str, Any]
 
 
 class CreatePostParams(BaseModel):
-    author_id: int
+    userId: int
     title: str
     body: str
 
 
-class DetailPost(Post):
+class CreatedPost(BaseModel):
+    userId: int
     id: int
     title: str
     body: str
-    author: Dict[str, Any]
+
+
+class PostDetails(Post):
     comments: List[Dict[str, Any]]
 
 
