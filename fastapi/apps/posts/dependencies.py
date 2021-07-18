@@ -1,4 +1,4 @@
-import aiohttp
+from aiohttp import ClientSession
 
 from typing import List, Dict, Any
 
@@ -6,7 +6,7 @@ from .models import Post, CreatePostParams, CreatedPost, PostDetails, UpdatePost
 
 
 class PostRepository:
-    def __init__(self):
+    def __init__(self) -> None:
         self._endpoint_posts = "https://jsonplaceholder.typicode.com/posts"
         self._endpoint_users = "https://jsonplaceholder.typicode.com/users"
         self._endpoint_comments = "https://jsonplaceholder.typicode.com/comments"
@@ -36,13 +36,13 @@ class PostRepository:
         return self._convert_post_details(raw_post)
 
     async def _list_posts(self) -> List[Dict[str, Any]]:
-        async with aiohttp.ClientSession(trust_env=True) as session:
+        async with ClientSession(trust_env=True) as session:
             resp_posts = await session.get(self._endpoint_posts)
             raw_posts = await resp_posts.json()
             return raw_posts
 
     async def _post_details(self, post_id: int) -> Dict[str, Any]:
-        async with aiohttp.ClientSession(trust_env=True) as session:
+        async with ClientSession(trust_env=True) as session:
             resp = await session.get(f'{self._endpoint_posts}/{post_id}')
             raw_post = await resp.json()
             resp_comments = await session.get(f"{self._endpoint_comments}?postId={post_id}")
@@ -58,25 +58,25 @@ class PostRepository:
             return raw_post
 
     async def _list_users(self) -> List[Dict[str, Any]]:
-        async with aiohttp.ClientSession(trust_env=True) as session:
+        async with ClientSession(trust_env=True) as session:
             resp = await session.get(self._endpoint_users)
             raw_users = await resp.json()
             return raw_users
 
     async def _list_comments(self) -> List[Dict[str, Any]]:
-        async with aiohttp.ClientSession() as session:
+        async with ClientSession() as session:
             resp = await session.get(self._endpoint_comments)
             raw_comments = await resp.json()
             return raw_comments
 
     async def _create_post(self, user: CreatePostParams) -> Dict[str, Any]:
-        async with aiohttp.ClientSession(trust_env=True) as session:
+        async with ClientSession(trust_env=True) as session:
             resp = await session.post(self._endpoint_posts, json=user.dict())
             raw_post = await resp.json()
             return raw_post
 
     async def _update_post(self, post: UpdatePostParams, post_id: int) -> Dict[str, Any]:
-        async with aiohttp.ClientSession(trust_env=True) as session:
+        async with ClientSession(trust_env=True) as session:
             resp = await session.put(
                 f'{self._endpoint_posts}/{post_id}',
                 json=post.dict()
